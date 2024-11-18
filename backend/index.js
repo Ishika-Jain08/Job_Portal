@@ -1,7 +1,8 @@
-import express from "express";
+import express, { urlencoded } from "express";
 const app = express();
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import bodyParser  from 'body-parser';
 import connectDB from "./utils/db.js";
 //! routes...
 import userRouter from './routes/userRoute.js';
@@ -11,6 +12,8 @@ import applicationRouter from './routes/ApplicationRoute.js'
 
 import dotenv from 'dotenv';
 dotenv.config({});
+//! running command npm run dev
+const PORT = process.env.PORT ||  3000;
 connectDB();
 
 // set backend path
@@ -19,7 +22,8 @@ const _dirname = path.resolve();
 
 //! middleware
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(urlencoded({extended:true}));
 app.use(cookieParser());
 const corsOptions={
     origin:'http://localhost:5173',
@@ -27,8 +31,7 @@ const corsOptions={
 }
 app.use(cors(corsOptions));
 
-//! running command npm run dev
-const PORT = process.env.PORT ||  3000;
+
 
 //! routes api
 app.use('/api/v1/user',userRouter);
